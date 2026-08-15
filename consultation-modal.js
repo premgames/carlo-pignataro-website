@@ -70,3 +70,34 @@
     });
   });
 })();
+
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var toggle = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (!toggle || !links) return;
+    var icon = toggle.querySelector('i');
+
+    function setOpen(open) {
+      links.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (icon) icon.className = open ? 'ti ti-x' : 'ti ti-menu-2';
+    }
+
+    toggle.addEventListener('click', function () {
+      setOpen(!links.classList.contains('is-open'));
+    });
+
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { setOpen(false); });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 860) setOpen(false);
+    });
+  });
+})();

@@ -71,7 +71,7 @@ a { color: inherit; }
 .btn-large { padding: 13px 26px; font-size: 14px; }
 
 /* ---------- Nav ---------- */
-.nav { border-bottom: 0.5px solid var(--border); background: var(--ivory); }
+.nav { border-bottom: 0.5px solid var(--border); background: var(--ivory); position: relative; }
 .nav-inner {
   max-width: 1140px;
   margin: 0 auto;
@@ -79,6 +79,20 @@ a { color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--charcoal);
+  font-size: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 .wordmark {
   font-family: 'Playfair Display', serif;
@@ -828,7 +842,28 @@ a { color: inherit; }
   .hero-photo { aspect-ratio: 16 / 9; }
   .hero-copy { padding: 40px 28px; }
   .cards { grid-template-columns: 1fr; }
-  .nav-links { gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+
+  .nav-toggle { display: flex; }
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--ivory);
+    border-bottom: 0.5px solid var(--border);
+    padding: 4px 32px 20px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+  .nav-links.is-open { max-height: 320px; opacity: 1; visibility: visible; }
+  .nav-links a { padding: 13px 0; border-bottom: 0.5px solid var(--border); font-size: 15px; }
+  .nav-cta { margin-top: 16px; width: 100%; padding: 12px 16px; }
 
   .cta { min-height: auto; padding: 56px 28px; }
 
@@ -853,7 +888,14 @@ a { color: inherit; }
   .bp-col-2.bp-r-btn { grid-row: 10; }
   .bp-r-btn { justify-self: center !important; }
 
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "brand brand" "links social";
+    gap: 28px 20px;
+  }
+  .footer-brand { grid-area: brand; }
+  .footer-links { grid-area: links; }
+  .footer-social { grid-area: social; }
 
   .program-block-inner, .program-block-reverse { flex-direction: column; text-align: center; }
   .program-content { align-items: center; }
@@ -861,9 +903,49 @@ a { color: inherit; }
 
   .newsletter-inner { flex-direction: column; text-align: center; gap: 40px; }
   .newsletter-content { align-items: center; }
-  .newsletter-visual { margin: 0 auto; }
+  .newsletter-visual { margin: 0 auto; width: 240px; }
 
   .book-hero { flex-direction: column; text-align: center; }
   .book-hero-content { align-items: center; }
   .book-hero-cover { flex: none; width: 220px; }
+}
+
+@media (max-width: 480px) {
+  .nav-inner { padding: 14px 20px; }
+  .hero-copy { padding: 32px 20px; }
+  .hero-copy h1 { font-size: 27px; }
+  .proof-strip { padding: 18px 20px; }
+  .proof-label { font-size: 18px; }
+
+  .help, .book-podcast, .newsletter, .career-big, .credentials-big,
+  .industries, .endorsements, .clients, .program-block, .book-hero,
+  .story, .philosophy, .cta { padding-left: 20px; padding-right: 20px; }
+
+  .career-grid, .credential-grid { grid-template-columns: 1fr; }
+  .career-card, .credential-card { padding: 20px 16px; }
+  .career-org { font-size: 18px; }
+
+  .about-intro { padding: 28px 20px; }
+  .about-intro h1 { font-size: 26px; }
+  .section-label { font-size: 21px; }
+
+  .pull-quote { padding: 8px 20px 28px; }
+  .pull-quote p { font-size: 21px; }
+
+  .philosophy-card { padding: 24px 22px; }
+  .philosophy-card p { font-size: 16px; }
+
+  .program-content h2 { font-size: 24px; }
+
+  .newsletter-content h2 { font-size: 24px; }
+  .newsletter-visual { flex-basis: 180px; height: 180px; width: 180px; }
+  .newsletter-card { width: 160px; height: 160px; }
+  .newsletter-card-front { padding: 18px; }
+
+  .book-hero-content h1 { font-size: 28px; }
+  .book-hero-cover { width: 180px; }
+
+  .cta-inner h2, .cta-content h2 { font-size: 24px; }
+
+  .industry-track span { font-size: 16px; padding: 11px 20px; }
 }
