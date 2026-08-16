@@ -147,8 +147,9 @@
       function tick() {
         if (!paused) {
           var half = scroller.scrollWidth / 2;
-          scroller.scrollLeft += speed;
-          if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;
+          var target = scroller.scrollLeft + speed;
+          if (target >= half) target -= half;
+          scroller.scrollTo({ left: target, behavior: 'instant' });
         }
         requestAnimationFrame(tick);
       }
