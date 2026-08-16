@@ -104,11 +104,13 @@
 
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     document.querySelectorAll('.carousel').forEach(function (carousel) {
       var scroller = carousel.querySelector('.marquee, .industry-marquee');
       var prev = carousel.querySelector('.carousel-prev');
       var next = carousel.querySelector('.carousel-next');
-      if (!scroller || !prev || !next) return;
+      if (!scroller) return;
 
       function step() {
         var track = scroller.firstElementChild;
@@ -116,16 +118,41 @@
         return item ? item.getBoundingClientRect().width + 16 : scroller.clientWidth * 0.8;
       }
 
-      function updateButtons() {
-        prev.disabled = scroller.scrollLeft <= 1;
-        next.disabled = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 1;
+      var paused = false;
+      var resumeTimer = null;
+      function pauseThenResume() {
+        paused = true;
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(function () { paused = false; }, 2500);
       }
 
-      prev.addEventListener('click', function () { scroller.scrollBy({ left: -step(), behavior: 'smooth' }); });
-      next.addEventListener('click', function () { scroller.scrollBy({ left: step(), behavior: 'smooth' }); });
-      scroller.addEventListener('scroll', updateButtons, { passive: true });
-      window.addEventListener('resize', updateButtons);
-      updateButtons();
+      if (prev) prev.addEventListener('click', function () {
+        pauseThenResume();
+        scroller.scrollBy({ left: -step(), behavior: 'smooth' });
+      });
+      if (next) next.addEventListener('click', function () {
+        pauseThenResume();
+        scroller.scrollBy({ left: step(), behavior: 'smooth' });
+      });
+
+      if (reduceMotion) return;
+
+      var speed = 0.5; // px per animation frame
+
+      carousel.addEventListener('mouseenter', function () { paused = true; });
+      carousel.addEventListener('mouseleave', function () { clearTimeout(resumeTimer); paused = false; });
+      scroller.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+      scroller.addEventListener('touchend', pauseThenResume, { passive: true });
+
+      function tick() {
+        if (!paused) {
+          var half = scroller.scrollWidth / 2;
+          scroller.scrollLeft += speed;
+          if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
     });
   });
 })();
