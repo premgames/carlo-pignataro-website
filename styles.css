@@ -235,24 +235,46 @@ a { color: inherit; }
   margin-top: 40px;
   padding-top: 28px;
 }
-.marquee { overflow: hidden; width: 100%; }
-.marquee-track {
+.carousel { display: flex; align-items: center; gap: 12px; }
+.carousel-arrow {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  color: var(--charcoal);
   display: flex;
-  gap: 14px;
-  width: max-content;
-  animation: cp-scroll 34s linear infinite;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
 }
-.marquee:hover .marquee-track { animation-play-state: paused; }
-@keyframes cp-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.carousel-arrow i { font-size: 16px; }
+.carousel-arrow:hover { background: var(--oxblood); color: var(--ivory); border-color: var(--oxblood); }
+.carousel-arrow:disabled { opacity: 0.3; cursor: default; }
+.carousel-arrow:disabled:hover { background: var(--card); color: var(--charcoal); border-color: var(--border); }
+.marquee {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.marquee::-webkit-scrollbar { display: none; }
+.marquee-track { display: flex; gap: 14px; width: max-content; }
 .quote-card {
   flex-shrink: 0;
   width: 240px;
   background: var(--ivory-tint);
   border-radius: 10px;
   padding: 16px 18px;
+  scroll-snap-align: start;
 }
 .quote-card p:first-child { font-size: 13px; line-height: 1.5; color: var(--charcoal); margin: 0 0 8px; }
 .quote-attr { font-size: 11px; color: var(--oxblood); font-weight: 500; }
@@ -553,15 +575,20 @@ a { color: inherit; }
   border-top: 0.5px solid var(--border);
 }
 .industries .section-label { padding-right: 32px; }
-.industry-marquee { overflow: hidden; width: 100%; padding: 8px 0; }
-.industry-marquee + .industry-marquee { margin-top: 8px; }
-.industry-track {
-  display: flex;
-  gap: 16px;
-  width: max-content;
-  animation: cp-scroll 32s linear infinite;
+.industries .carousel + .carousel { margin-top: 8px; }
+.industry-marquee {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  padding: 8px 0;
 }
-.industry-marquee:hover .industry-track { animation-play-state: paused; }
+.industry-marquee::-webkit-scrollbar { display: none; }
+.industry-track { display: flex; gap: 16px; width: max-content; }
 .industry-track span {
   flex-shrink: 0;
   font-family: 'Playfair Display', serif;
@@ -573,6 +600,7 @@ a { color: inherit; }
   border-radius: 30px;
   padding: 14px 28px;
   white-space: nowrap;
+  scroll-snap-align: start;
 }
 
 .endorsements {
@@ -941,7 +969,13 @@ a { color: inherit; }
   .newsletter-content h2 { font-size: 24px; }
   .newsletter-visual { flex-basis: 180px; height: 180px; width: 180px; }
   .newsletter-card { width: 160px; height: 160px; }
-  .newsletter-card-front { padding: 18px; }
+  .newsletter-card-front { padding: 14px; }
+  .newsletter-card-front i { font-size: 16px; }
+  .newsletter-card-front p { font-size: 11px; line-height: 1.35; }
+  .newsletter-card-front span { font-size: 8px; }
+
+  .carousel-arrow { display: none; }
+  .carousel { gap: 0; }
 
   .book-hero-content h1 { font-size: 28px; }
   .book-hero-cover { width: 180px; }

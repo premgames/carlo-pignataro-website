@@ -101,3 +101,31 @@
     });
   });
 })();
+
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.carousel').forEach(function (carousel) {
+      var scroller = carousel.querySelector('.marquee, .industry-marquee');
+      var prev = carousel.querySelector('.carousel-prev');
+      var next = carousel.querySelector('.carousel-next');
+      if (!scroller || !prev || !next) return;
+
+      function step() {
+        var track = scroller.firstElementChild;
+        var item = track && track.firstElementChild;
+        return item ? item.getBoundingClientRect().width + 16 : scroller.clientWidth * 0.8;
+      }
+
+      function updateButtons() {
+        prev.disabled = scroller.scrollLeft <= 1;
+        next.disabled = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 1;
+      }
+
+      prev.addEventListener('click', function () { scroller.scrollBy({ left: -step(), behavior: 'smooth' }); });
+      next.addEventListener('click', function () { scroller.scrollBy({ left: step(), behavior: 'smooth' }); });
+      scroller.addEventListener('scroll', updateButtons, { passive: true });
+      window.addEventListener('resize', updateButtons);
+      updateButtons();
+    });
+  });
+})();
